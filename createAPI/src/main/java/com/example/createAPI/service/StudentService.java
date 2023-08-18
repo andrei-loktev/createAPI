@@ -17,6 +17,11 @@ public class StudentService {
         return map.get(id);
     }
 
+    public Collection<Student> getByAge(int age){
+        return map.values().stream()
+                .filter(student -> student.getAge()==age)
+                .toList();
+    }
     public Collection<Student> getAll() {
         return map.values();
     }

@@ -15,6 +15,12 @@ public class FacultyService {
     public Faculty getById(Long id){
         return map.get(id);
     }
+
+    public Collection<Faculty> getByColor(String color){
+        return map.values().stream()
+                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color))
+                .toList();
+    }
     public Collection<Faculty> getAll(){
         return map.values();
     }
