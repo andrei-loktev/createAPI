@@ -1,48 +1,49 @@
 package com.example.createAPI.service;
 
-import com.example.createAPI.exception.StudentNotFoundException;
+import com.example.createAPI.exception.FacultyNotFoundException;
 import com.example.createAPI.model.Faculty;
+import com.example.createAPI.repository.FacultyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
 @Service
 public class FacultyService {
-    private Map<Long, Faculty> map = new HashMap<>();
-    private Long COUNTER = 1L;
+
+    private final FacultyRepository facultyRepository;
+
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty getById(Long id){
-        return map.get(id);
+        return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
+    }
+
+    public Faculty create(Faculty faculty){
+        return facultyRepository.save(faculty);
+    }
+
+    public Faculty update(Long id, Faculty faculty) {
+        Faculty existingFaculty = facultyRepository.findById(id)
+                        .orElseThrow(FacultyNotFoundException::new);
+        existingFaculty.setName(faculty.getName());
+        existingFaculty.setColor(faculty.getColor());
+        return facultyRepository.save(existingFaculty);
+    }
+
+    public Faculty remove(Long id){
+        Faculty faculty = facultyRepository.findById(id)
+                .orElseThrow(FacultyNotFoundException::new);
+        facultyRepository.delete(faculty);
+        return faculty;
     }
 
     public Collection<Faculty> getByColor(String color){
-        return map.values().stream()
-                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color))
-                .toList();
+        return facultyRepository.findAllByColor(color);
     }
+
     public Collection<Faculty> getAll(){
-        return map.values();
-    }
-    public Faculty create(Faculty faculty){
-        Long nextId = COUNTER++;
-        faculty.setId(nextId);
-        map.put(faculty.getId(), faculty);
-        return faculty;
-    }
-    public Faculty update(Long id, Faculty faculty) {
-        if (!map.containsKey(id)) {
-            throw new StudentNotFoundException();
-        }
-        Faculty existingFaculty = map.get(id);
-        existingFaculty.setName(faculty.getName());
-        existingFaculty.setColor(faculty.getColor());
-        return existingFaculty;
-    }
-    public void delete(Long id){
-        if(!map.containsKey(id)){
-            throw new StudentNotFoundException();
-        }
-        map.remove(id);
+        return facultyRepository.findAll();
     }
 }
