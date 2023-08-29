@@ -28,10 +28,6 @@ public class StudentService {
         return studentRepository.findById(id)
                 .orElseThrow(StudentNotFoundException::new);
     }
-    public Collection<Student> getByAge(int age){
-        return studentRepository.findAllByAge(age);
-    }
-
     public Collection<Student> getAll() {
         return studentRepository.findAll();
     }
@@ -49,5 +45,17 @@ public class StudentService {
                 .orElseThrow(StudentNotFoundException::new);
         studentRepository.delete(existingStudent);
         return existingStudent;
+    }
+
+    public Collection<Student> getByAge(int age){
+        return studentRepository.findAllByAge(age);
+    }
+
+    public Collection<Student> findAllByAgeBetween(int min, int max){
+        return studentRepository.findAllByAgeBetween(min, max);
+    }
+
+    public Collection<Student> getByFacultyId(Long facultyId){
+        return studentRepository.findAllByFaculty_Id(facultyId);
     }
 }

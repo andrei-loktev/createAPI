@@ -1,6 +1,7 @@
 package com.example.createAPI.service;
 
 import com.example.createAPI.exception.FacultyNotFoundException;
+import com.example.createAPI.exception.StudentNotFoundException;
 import com.example.createAPI.model.Faculty;
 import com.example.createAPI.repository.FacultyRepository;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,15 @@ public class FacultyService {
         return facultyRepository.findAllByColor(color);
     }
 
+    public Collection<Faculty> findAllByColorIgnoreCaseOrNameIgnoreCase(String name, String color){
+        return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(name, color);
+    }
+
     public Collection<Faculty> getAll(){
         return facultyRepository.findAll();
+    }
+
+    public Faculty getByStudentId(Long studentId){
+        return facultyRepository.findByStudentId(studentId).orElseThrow(FacultyNotFoundException::new);
     }
 }

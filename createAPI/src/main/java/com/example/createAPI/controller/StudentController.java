@@ -28,21 +28,35 @@ public class StudentController {
 
         return studentService.getById(id);
     }
-    @GetMapping("/filtered")
-    public Collection<Student> getByAge(@RequestParam("age") int age){
-        return studentService.getByAge(age);
-    }
+
     @PostMapping
-    public Student create(@RequestBody Student student){
+    public Student create(@RequestBody Student student) {
         return studentService.create(student);
     }
+
     @PutMapping("/{id}")
-    public Student update(@PathVariable("id") Long id,@RequestBody Student student){
-        return studentService.update(id,student);
+    public Student update(@PathVariable("id") Long id, @RequestBody Student student) {
+        return studentService.update(id, student);
     }
+
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id){
+    public void delete(@PathVariable("id") Long id) {
         studentService.delete(id);
     }
 
+    @GetMapping("/filtered")
+    public Collection<Student> getByAge(@RequestParam("age") int age) {
+        return studentService.getByAge(age);
+    }
+
+    @GetMapping("/byAge")
+    public Collection<Student> findAllByAgeBetween(@RequestParam("min") int min,
+                                                   @RequestParam("max") int max) {
+        return studentService.findAllByAgeBetween(min, max);
+    }
+
+    @GetMapping("/byFaculty")
+    public Collection<Student> getByFacultyId(@RequestParam Long facultyId) {
+        return studentService.getByFacultyId(facultyId);
+    }
 }
