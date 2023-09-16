@@ -28,14 +28,10 @@ public class AvatarService {
         this.studentRepository = studentRepository;
     }
 
-    public Avatar getById(Long id){
-        return avatarRepository.findById(id).orElseThrow();
-    }
-
     public Long save(Long studentId, MultipartFile multipartFile) throws IOException {
         String fullPath = saveToDisk(studentId, multipartFile);
         Avatar avatar = saveToDB(studentId, multipartFile, fullPath);
-        
+
         return avatar.getId();
     }
 
@@ -64,5 +60,9 @@ public class AvatarService {
         multipartFile.getInputStream().transferTo(stream);  //переносим байты в папку
         stream.close();
         return fullPath;
+    }
+
+    public Avatar getById(Long id){
+        return avatarRepository.findById(id).orElseThrow();
     }
 }
