@@ -1,7 +1,10 @@
 package com.example.createAPI.service;
 
+import com.example.createAPI.exception.FacultyNotFoundException;
 import com.example.createAPI.exception.StudentNotFoundException;
+import com.example.createAPI.model.Faculty;
 import com.example.createAPI.model.Student;
+import com.example.createAPI.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -10,38 +13,49 @@ import java.util.Map;
 
 @Service
 public class StudentService {
-    private Map<Long, Student> map = new HashMap<>();
-    private Long COUNTER = 1L;
 
-    public Student getById(Long id) {
-        return map.get(id);
-    }
+    private final StudentRepository studentRepository;
 
-    public Collection<Student> getAll() {
-        return map.values();
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     public Student create(Student student) {
-        Long nextId = COUNTER++;
-        student.setId(nextId);
-        map.put(student.getId(), student);
-        return student;
+        return studentRepository.save(student);
+    }
+
+    public Student getById(Long id) {
+        return studentRepository.findById(id)
+                .orElseThrow(StudentNotFoundException::new);
+    }
+    public Collection<Student> getAll() {
+        return studentRepository.findAll();
     }
 
     public Student update(Long id, Student student) {
-        if (!map.containsKey(id)) {
-            throw new StudentNotFoundException();
-        }
-        Student existingStudent = map.get(id);
+        Student existingStudent = studentRepository.findById(id)
+                .orElseThrow(FacultyNotFoundException::new);
         existingStudent.setName(student.getName());
         existingStudent.setAge(student.getAge());
+        return studentRepository.save(existingStudent);
+    }
+
+    public Student delete(Long id) {
+        Student existingStudent = studentRepository.findById(id)
+                .orElseThrow(StudentNotFoundException::new);
+        studentRepository.delete(existingStudent);
         return existingStudent;
     }
 
-    public void delete(Long id) {
-        if (!map.containsKey(id)) {
-            throw new StudentNotFoundException();
-        }
-        map.remove(id);
+    public Collection<Student> getByAge(int age){
+        return studentRepository.findAllByAge(age);
+    }
+
+    public Collection<Student> findAllByAgeBetween(int min, int max){
+        return studentRepository.findAllByAgeBetween(min, max);
+    }
+
+    public Collection<Student> getByFacultyId(Long facultyId){
+        return studentRepository.findAllByFaculty_Id(facultyId);
     }
 }
