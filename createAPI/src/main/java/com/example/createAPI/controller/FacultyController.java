@@ -47,10 +47,9 @@ public class FacultyController {
         return facultyService.getByColor(color);
     }
 
-    @GetMapping("/byColorName")
-    public Collection<Faculty> getByColor(@RequestParam("color") String color,
-                                          @RequestParam("name") String name){
-        return facultyService.findAllByColorIgnoreCaseOrNameIgnoreCase(name, color);
+    @GetMapping("/byNameOrColor")
+    public Collection<Faculty> getByColorOrName(@RequestParam String nameOrColor){
+        return facultyService.findAllByColorIgnoreCaseOrNameIgnoreCase(nameOrColor);
     }
 
     @GetMapping("by_student")

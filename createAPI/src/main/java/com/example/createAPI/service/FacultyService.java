@@ -14,6 +14,7 @@ public class FacultyService {
     private final FacultyRepository facultyRepository;
 
     public FacultyService(FacultyRepository facultyRepository) {
+
         this.facultyRepository = facultyRepository;
     }
 
@@ -41,11 +42,12 @@ public class FacultyService {
     }
 
     public Collection<Faculty> getByColor(String color){
+
         return facultyRepository.findAllByColor(color);
     }
 
-    public Collection<Faculty> findAllByColorIgnoreCaseOrNameIgnoreCase(String name, String color){
-        return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(name, color);
+    public Collection<Faculty> findAllByColorIgnoreCaseOrNameIgnoreCase(String nameOrColor){
+        return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(nameOrColor);
     }
 
     public Collection<Faculty> getAll(){
