@@ -8,17 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Service
+@Transactional
 public class AvatarService {
     private AvatarRepository avatarRepository;
     private StudentRepository studentRepository;
 
-    @Value("${path.to.avatars.folder}")
+    @Value("${path.to.avatars.folder}")   //путь к аватаркам
     private Path pathToAvatars;
 
     public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
@@ -26,14 +28,10 @@ public class AvatarService {
         this.studentRepository = studentRepository;
     }
 
-    public Avatar getById(Long id){
-        return avatarRepository.findById(id).orElseThrow();
-    }
-
     public Long save(Long studentId, MultipartFile multipartFile) throws IOException {
         String fullPath = saveToDisk(studentId, multipartFile);
         Avatar avatar = saveToDB(studentId, multipartFile, fullPath);
-        
+
         return avatar.getId();
     }
 
@@ -56,10 +54,15 @@ public class AvatarService {
         int index = originalFilename.lastIndexOf(".");   //получение индекса точки с конца
         String extension = originalFilename.substring(index);   //берём подстроку начиная с точки
         String fileName = studentId + extension;
+
         FileOutputStream stream = new FileOutputStream(pathToAvatars.toAbsolutePath() + "/" + fileName);//полный путь к папке с файлом
         String fullPath = pathToAvatars.toAbsolutePath() + "/" + fileName;
         multipartFile.getInputStream().transferTo(stream);  //переносим байты в папку
         stream.close();
         return fullPath;
+    }
+
+    public Avatar getById(Long id){
+        return avatarRepository.findById(id).orElseThrow();
     }
 }

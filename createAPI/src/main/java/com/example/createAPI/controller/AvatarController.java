@@ -21,8 +21,8 @@ public class AvatarController {
         this.avatarService = avatarService;
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> save(@RequestParam Long studentId, MultipartFile multipartFile) {
+    @PostMapping (consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Long> save(@RequestParam Long studentId, @RequestBody MultipartFile multipartFile) {
         try {
             Long avatarId = avatarService.save(studentId, multipartFile);
             return ResponseEntity.ok(avatarId);
