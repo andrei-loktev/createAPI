@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/avatar")
@@ -22,7 +23,7 @@ public class AvatarController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Long> save(@RequestParam Long studentId, MultipartFile multipartFile) {
+    public ResponseEntity<Long> save(@RequestParam Long studentId, @RequestBody MultipartFile multipartFile) {
         try {
             Long avatarId = avatarService.save(studentId, multipartFile);
             return ResponseEntity.ok(avatarId);
@@ -56,4 +57,8 @@ public class AvatarController {
         return ResponseEntity.status(200).headers(headers).body(data);
     }
 
+    @GetMapping("/page/{num}")
+    public List<Avatar> getPage(@PathVariable("num") int pageNum){
+        return avatarService.getPage(pageNum);
+    }
 }
