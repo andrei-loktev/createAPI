@@ -6,6 +6,7 @@ import com.example.createAPI.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -58,5 +59,18 @@ public class StudentController {
     @GetMapping("/byFaculty")
     public Collection<Student> getByFacultyId(@RequestParam Long facultyId) {
         return studentService.getByFacultyId(facultyId);
+    }
+
+    @GetMapping("/count")
+    public long count(){
+        return studentService.count();
+    }
+    @GetMapping("/average")
+    public double average(){
+        return studentService.average();
+    }
+    @GetMapping("/last-five")
+    public List<Student> getLastFive(){
+        return studentService.getLastStudents(5);
     }
 }

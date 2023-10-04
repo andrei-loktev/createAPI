@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -57,5 +58,17 @@ public class StudentService {
 
     public Collection<Student> getByFacultyId(Long facultyId){
         return studentRepository.findAllByFaculty_Id(facultyId);
+    }
+
+    public Long count(){
+        return studentRepository.countStudents();
+    }
+
+    public double average(){
+        return studentRepository.averageAge();
+    }
+
+    public List<Student> getLastStudents(int quantity){
+        return studentRepository.findLastStudents(quantity);
     }
 }

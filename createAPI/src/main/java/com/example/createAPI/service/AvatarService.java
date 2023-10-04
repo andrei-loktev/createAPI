@@ -5,6 +5,7 @@ import com.example.createAPI.model.Student;
 import com.example.createAPI.repository.AvatarRepository;
 import com.example.createAPI.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,11 +13,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @Service
 public class AvatarService {
-    private AvatarRepository avatarRepository;
-    private StudentRepository studentRepository;
+    private final AvatarRepository avatarRepository;
+    private final StudentRepository studentRepository;
 
     @Value("${path.to.avatars.folder}")
     private Path pathToAvatars;
@@ -35,6 +37,11 @@ public class AvatarService {
         Avatar avatar = saveToDB(studentId, multipartFile, fullPath);
         
         return avatar.getId();
+    }
+
+    public List<Avatar> getPage(int pageNum){
+        PageRequest pageRequest = PageRequest.of(pageNum, 3);  //создаём объект типа pageReq
+        return avatarRepository.findAll(pageRequest).getContent();
     }
 
     private Avatar saveToDB(Long studentId, MultipartFile multipartFile, String fullPath) throws IOException {
