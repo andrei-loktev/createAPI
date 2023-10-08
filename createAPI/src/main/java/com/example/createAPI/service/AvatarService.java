@@ -4,6 +4,8 @@ import com.example.createAPI.model.Avatar;
 import com.example.createAPI.model.Student;
 import com.example.createAPI.repository.AvatarRepository;
 import com.example.createAPI.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,9 @@ import java.nio.file.Path;
 
 @Service
 public class AvatarService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     private AvatarRepository avatarRepository;
     private StudentRepository studentRepository;
 
@@ -27,10 +32,12 @@ public class AvatarService {
     }
 
     public Avatar getById(Long id){
+        logger.info("running metod getById");
         return avatarRepository.findById(id).orElseThrow();
     }
 
     public Long save(Long studentId, MultipartFile multipartFile) throws IOException {
+        logger.info("running metod save");
         String fullPath = saveToDisk(studentId, multipartFile);
         Avatar avatar = saveToDB(studentId, multipartFile, fullPath);
         
