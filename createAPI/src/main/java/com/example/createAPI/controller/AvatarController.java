@@ -2,6 +2,8 @@ package com.example.createAPI.controller;
 
 import com.example.createAPI.model.Avatar;
 import com.example.createAPI.service.AvatarService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/avatar")
 public class AvatarController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AvatarController.class);
     private final AvatarService avatarService;
 
     public AvatarController(AvatarService avatarService) {
@@ -27,7 +31,7 @@ public class AvatarController {
             Long avatarId = avatarService.save(studentId, multipartFile);
             return ResponseEntity.ok(avatarId);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info("failed to save avatar id =" + studentId,e);
             return ResponseEntity.badRequest().build();
         }
     }
