@@ -87,4 +87,46 @@ public class StudentService {
                 .average()
                 .orElseThrow(StudentNotFoundException::new);
     }
+
+    public void printStudentName(){
+        List<Student> all = studentRepository.findAll();
+        System.out.println(all.get(0));
+        System.out.println(all.get(1));
+
+        Thread thread1 = new Thread(()-> {
+            System.out.println(all.get(2));
+            System.out.println(all.get(3));
+        });
+
+        Thread thread2 = new Thread(()-> {
+            System.out.println(all.get(4));
+            System.out.println(all.get(5));
+        });
+
+        thread1.start();
+        thread2.start();
+    }
+
+    public synchronized void printSyncName(Student student){
+        System.out.println(student);
+    }
+
+    public void printSyncName(){
+        List<Student> all = studentRepository.findAll();
+        printSyncName(all.get(0));
+        printSyncName(all.get(1));
+
+        Thread thread1 = new Thread(()-> {
+            printSyncName(all.get(2));
+            printSyncName(all.get(3));
+        });
+
+        Thread thread2 = new Thread(()-> {
+            printSyncName(all.get(4));
+            printSyncName(all.get(5));
+        });
+
+        thread1.start();
+        thread2.start();
+    }
 }
