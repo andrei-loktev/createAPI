@@ -6,6 +6,7 @@ import com.example.createAPI.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -58,5 +59,25 @@ public class StudentController {
     @GetMapping("/byFaculty")
     public Collection<Student> getByFacultyId(@RequestParam Long facultyId) {
         return studentService.getByFacultyId(facultyId);
+    }
+
+    @GetMapping("stream/startWith_A")
+    public List<String> startWithA(){
+        return studentService.getAllWithStartA();
+    }
+
+    @GetMapping("stream/averageAge")
+    public double getAverageAge(){
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("/thread/studentName")
+    public void printStudentName(){
+        studentService.printStudentName();
+    }
+
+    @GetMapping("/thread/syncName")
+    public void printSyncName(){
+        studentService.printSyncName();
     }
 }
