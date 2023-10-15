@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -69,5 +71,20 @@ public class StudentService {
     public Collection<Student> getByFacultyId(Long facultyId){
         logger.info("running metod getByFacultyId");
         return studentRepository.findAllByFaculty_Id(facultyId);
+    }
+
+    public List<String> getAllWithStartA(){
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .filter(s -> s.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public double getAverageAge(){
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow(StudentNotFoundException::new);
     }
 }
